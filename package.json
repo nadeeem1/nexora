@@ -3,6 +3,11 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nadeeem1/nexora.git"
+  },
   "engines": {
     "node": ">=18"
   },
