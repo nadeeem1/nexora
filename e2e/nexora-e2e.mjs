@@ -308,13 +308,36 @@ try {
   ];
   for (const [route, expected] of titleRoutes) {
     await page.goto(`${BASE}${route}`, { waitUntil: 'domcontentloaded' });
-    await page.waitForTimeout(300);
-    const title = await page.title();
-    if (title.includes(expected) && title.includes('Nexora')) ok(`Document title set for ${route} (${title})`);
+    const titled = await page
+      .waitForFunction((exp) => document.title.includes(exp) && document.title.includes('Nexora'), expected, { timeout: 6000 })
+      .then(() => true)
+      .catch(() => false);
+    const title = await page.title().catch(() => '');
+    if (titled) ok(`Document title set for ${route} (${title})`);
     else fail(`Document title set for ${route}`, title);
   }
   const metaDesc = await page.evaluate(() => document.querySelector('meta[name="description"]')?.getAttribute('content') ?? '');
   if (metaDesc.length > 20) ok('Meta description present'); else fail('Meta description present', metaDesc);
+
+  // ---------- Feature checks: live count summary, table headers, data export ----------
+  await page.goto(`${BASE}/tasks`, { waitUntil: 'domcontentloaded' });
+  await page.getByRole('heading', { name: 'Tasks' }).waitFor();
+  await page.waitForTimeout(300);
+  const scopeCount = await page.locator('table th[scope="col"]').count();
+  if (scopeCount >= 6) ok('Task table headers use scope="col"'); else fail('Task table headers use scope="col"', String(scopeCount));
+  const summary = await page.getByText(/Showing \d+ of \d+ tasks/).first().textContent().catch(() => '');
+  if (/Showing \d+ of \d+ tasks/.test(summary ?? '')) ok('Tasks list shows live count summary'); else fail('Tasks list shows live count summary', summary ?? '');
+  await page.getByRole('textbox', { name: 'Search tasks' }).fill('Design System');
+  await page.waitForTimeout(250);
+  const summaryAfter = await page.getByText(/Showing \d+ of \d+ tasks/).first().textContent().catch(() => '');
+  if (/Showing \d+ of \d+ tasks/.test(summaryAfter ?? '')) ok('Count summary updates when filtering'); else fail('Count summary updates when filtering', summaryAfter ?? '');
+  await page.getByRole('button', { name: 'Clear', exact: true }).click();
+  await page.waitForTimeout(200);
+
+  await page.goto(`${BASE}/settings`, { waitUntil: 'domcontentloaded' });
+  await page.getByRole('heading', { name: 'Settings' }).waitFor();
+  const exportBtn = await page.getByRole('button', { name: 'Export data' }).count();
+  if (exportBtn === 1) ok('Settings has Export data action'); else fail('Settings has Export data action', String(exportBtn));
 } catch (err) {
   fail('Unhandled error during test', String(err));
   console.error(err);

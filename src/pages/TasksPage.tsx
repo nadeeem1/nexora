@@ -159,6 +159,11 @@ export function TasksPage() {
         </div>
       </div>
 
+      <p role="status" aria-live="polite" className="mt-3 text-xs text-slate-500 dark:text-slate-400">
+        Showing <span className="font-medium text-slate-700 dark:text-slate-200">{filtered.length}</span> of{' '}
+        <span className="font-medium text-slate-700 dark:text-slate-200">{tasks.length}</span> tasks
+      </p>
+
       <Card className="mt-4" padded={false} hasTable>
         {filtered.length === 0 ? (
           <EmptyState

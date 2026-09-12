@@ -11,7 +11,7 @@ A polished, fully client-side **project & task management dashboard** built as a
 - **Task workflows** — status tabs with live counts, inline status changes, priority/project filters, and full-text search.
 - **Analytics** — Recharts visualization (task distribution, weekly output, completion trends, per-project progress, per-member workload).
 - **Dark mode** — light/dark/system themes with a live toggle.
-- **Persistence** — Zustand stores persisted to `localStorage`; data survives reloads. One-click "Reset demo data" restores seeds.
+- **Persistence** — Zustand stores persisted to `localStorage`; data survives reloads. One-click "Reset demo data" restores seeds, and "Export data" downloads everything as JSON.
 - **Responsive** — verified at 375 / 768 / 1024 / 1440 px: off-canvas drawer below `lg`, table ↔ card switches, adaptive grids.
 - **Accessibility** — skip-to-content link, semantic landmarks, labelled controls, focus-visible rings, `prefers-reduced-motion`, ARIA dialogs and toasts.
 - **Performance** — lazy route chunks; Recharts is code-split so heavy charts only load where needed.
@@ -55,7 +55,7 @@ npm run preview -- --port 4173 &  # serve the production build
 BASE_URL=http://127.0.0.1:4173 npm run test:e2e
 ```
 
-Current result: **51 / 51 assertions passed** (44 core + 7 SEO/title).
+Current result: **55 / 55 assertions passed** (44 core + 7 SEO/title + 4 feature/accessibility).
 
 ## Test results
 

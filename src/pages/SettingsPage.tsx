@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react';
-import { Bell, Database, Monitor, Moon, Palette, Sun, Trash2, User } from 'lucide-react';
+import { Bell, Database, Download, Monitor, Moon, Palette, Sun, Trash2, User } from 'lucide-react';
 import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { Field, Input, Textarea } from '../components/ui/Input';
@@ -53,6 +53,30 @@ export function SettingsPage() {
     }
     setProfile(draft);
     toast.success('Profile saved', 'Your changes were saved locally.');
+  };
+
+  const exportData = () => {
+    const payload: Record<string, unknown> = {};
+    for (let i = 0; i < localStorage.length; i += 1) {
+      const key = localStorage.key(i);
+      if (key && key.startsWith('nexora-')) {
+        try {
+          payload[key] = JSON.parse(localStorage.getItem(key) ?? 'null');
+        } catch {
+          payload[key] = localStorage.getItem(key);
+        }
+      }
+    }
+    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `nexora-export-${new Date().toISOString().slice(0, 10)}.json`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
+    toast.success('Export ready', 'Your data was downloaded as a JSON file.');
   };
 
   return (
@@ -124,14 +148,25 @@ export function SettingsPage() {
           </SectionCard>
 
           <SectionCard icon={<Database className="h-4 w-4" aria-hidden />} title="Data" subtitle="Demo data and local storage">
-            <div className="flex items-center justify-between gap-4">
-              <p className="text-sm text-slate-600 dark:text-slate-300">
-                Restore the workspace to its original demo state. All changes will be lost.
-              </p>
-              <Button variant="danger" onClick={() => setResetOpen(true)}>
-                <Trash2 className="mr-1.5 h-4 w-4" aria-hidden />
-                Reset data
-              </Button>
+            <div className="flex flex-col gap-3">
+              <div className="flex items-center justify-between gap-4">
+                <p className="text-sm text-slate-600 dark:text-slate-300">
+                  Restore the workspace to its original demo state. All changes will be lost.
+                </p>
+                <Button variant="danger" onClick={() => setResetOpen(true)}>
+                  <Trash2 className="mr-1.5 h-4 w-4" aria-hidden />
+                  Reset data
+                </Button>
+              </div>
+              <div className="flex items-center justify-between gap-4 border-t border-slate-100 pt-3 dark:border-slate-800">
+                <p className="text-sm text-slate-600 dark:text-slate-300">
+                  Download all project, task and team data as a JSON backup.
+                </p>
+                <Button variant="secondary" onClick={exportData}>
+                  <Download className="mr-1.5 h-4 w-4" aria-hidden />
+                  Export data
+                </Button>
+              </div>
             </div>
           </SectionCard>
         </div>

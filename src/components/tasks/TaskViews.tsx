@@ -59,13 +59,13 @@ export function TaskTable({ tasks, projectName, memberName, memberColor, onEdit,
     <Table>
       <THead>
         <TR>
-          <TH>Task</TH>
-          <TH>Project</TH>
-          <TH>Assignee</TH>
-          <TH>Due date</TH>
-          <TH>Priority</TH>
-          <TH>Status</TH>
-          <TH className="sr-only">Actions</TH>
+          <TH scope="col">Task</TH>
+          <TH scope="col">Project</TH>
+          <TH scope="col">Assignee</TH>
+          <TH scope="col">Due date</TH>
+          <TH scope="col">Priority</TH>
+          <TH scope="col">Status</TH>
+          <TH scope="col" className="sr-only">Actions</TH>
         </TR>
       </THead>
       <TBody>
