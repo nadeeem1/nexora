@@ -44,6 +44,19 @@ npm run build      # tsc + vite build -> dist/
 npm run preview    # serve dist/ (SPA fallback for deep links)
 ```
 
+## E2E tests
+
+The repo ships with a Playwright suite (`e2e/nexora-e2e.mjs`) that exercises the whole app at 1440 / 768 / 375 px widths, including CRUD flows, persistence, dark mode, search/filters, the command palette, and per-page `document.title` / meta-description checks. It also asserts zero console, network and page errors across the session.
+
+```bash
+npm install                 # first time
+npx playwright install chromium   # first time (browser binary)
+npm run preview -- --port 4173 &  # serve the production build
+BASE_URL=http://127.0.0.1:4173 npm run test:e2e
+```
+
+Current result: **51 / 51 assertions passed** (44 core + 7 SEO/title).
+
 ## Test results
 
 The production build was exercised end-to-end with Playwright in headless Chromium at 375 / 768 / 1440 px widths, monitoring console errors, failed requests and uncaught exceptions across the whole session:

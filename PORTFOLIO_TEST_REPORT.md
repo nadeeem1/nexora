@@ -33,15 +33,15 @@ Requires Node 18+ (verified on Node v24.18.1).
 | TypeScript strict typecheck | `npm run typecheck` | **PASS** — 0 errors |
 | ESLint (max-warnings 0) | `npm run lint` | **PASS** — 0 errors, 0 warnings |
 | Production build | `npm run build` | **PASS** — 2331 modules, chunk splitting |
-| Browser E2E (Playwright) | `vite preview` + script | **44 / 44 PASS** |
+| Browser E2E (Playwright) | `vite preview` + `npm run test:e2e` | **51 / 51 PASS** |
 | Console / network errors during E2E | captured across all pages | **0** |
 | Uncaught page errors during E2E | captured across all pages | **0** |
 
 Bundle size (gzip): core `index` **70.4 kB**, Recharts chunk **103.9 kB**, CSS **6.7 kB** — charts are code-split and only load on the pages that need them.
 
-## 3. End-to-end browser tests (44/44 passed)
+## 3. End-to-end browser tests (51/51 passed)
 
-Executed against the production build (`vite preview`) in headless Chromium via Playwright, collecting every console error, failed request and uncaught exception across the whole session.
+The suite is committed to the repository (`e2e/nexora-e2e.mjs`) and runs via `npm run test:e2e` against the production build. Executed in headless Chromium via Playwright at 1440 / 768 / 375 px, collecting every console error, failed request and uncaught exception across the whole session. It covers the 44 core checks plus 7 SEO checks: per-page `document.title` for all six routes and the meta-description tag.
 
 ### 3.1 Core flows (desktop 1440×900)
 
@@ -96,4 +96,4 @@ Executed against the production build (`vite preview`) in headless Chromium via 
 
 ---
 
-*Report generated from the automated Playwright run — 44 assertions, 44 passed, 0 console/network/page errors.*
+*Report generated from the automated Playwright run — 51 assertions, 51 passed, 0 console/network/page errors.*
