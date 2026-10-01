@@ -31,6 +31,7 @@ function spaFallbackPreview(): Plugin {
 }
 
 export default defineConfig({
+  base: '/nexora/',
   plugins: [react(), spaFallbackPreview()],
   server: { port: 5173, host: true },
   preview: { port: 4173, host: true },
